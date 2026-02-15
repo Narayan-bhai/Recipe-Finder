@@ -1,8 +1,8 @@
 from flask import jsonify,Blueprint
 from db.connect import connectDb
 from mysql.connector import Error
+from routes.tableBluePrint import tables_bp
 
-tables_bp = Blueprint("tables_bp", __name__)
 @tables_bp.route("/getTables")
 def getTables():
     con = connectDb()
