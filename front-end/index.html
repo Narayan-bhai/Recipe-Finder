@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <input type="text" id="recipeInput" placeholder="Enter recipe name" />
+    <input type="number" id="recipeCount" placeholder="How many?" min="1" />
     <button onclick="insertRow()">Insert 1st row</button>
     <button onclick="getTables()">Get tables</button>
+    <button onclick="getRecipes()">Get Recipes</button>
+    <button onclick="showRecipes()">Show Recipes</button>
+    <div class="recipes"></div>
   </body>
 </html>
