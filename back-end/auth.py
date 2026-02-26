@@ -57,6 +57,7 @@ def login():
         return response
     except Exception as e:
         print("Error while login",e)
+        return jsonify({"message":str(e)}),501
     finally:
         cursor.close()
         conn.close()

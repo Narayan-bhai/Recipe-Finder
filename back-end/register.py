@@ -25,6 +25,7 @@ def register():
         return response
     except Exception as e:
         print("Error while register",e)
+        return jsonify({"message":str(e)}),500
     finally:
         cursor.close()
         conn.close()

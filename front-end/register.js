@@ -4,7 +4,27 @@ const url = "http://localhost:5000";
 function goTOLogin(){
     window.location.href = "login.html";
 }
-
+function login(email,password){
+    return fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            email: email,
+            password: password
+        })
+    })
+    .then(async response => {
+        const data = await response.json()
+        if(response.status!=200) throw new Error(data.message)
+        if(data.message == "Login successful/session created"){
+            window.location.href = "index.html";
+        }
+    })
+    .catch(error => console.log("Error while login",error.message));
+}
 function register(){
     const email = document.getElementById("email").value;
     const passowrd = document.getElementById("password").value;
@@ -21,13 +41,14 @@ function register(){
             password: passowrd
         })
     })
-    .then(async response => {
-        const data = await response.json()
-        console.log("status ",response.status)
+    .then(response => {
         if(response.status!=200) throw new Error(data.message)
-        console.log(data.message)
+        return response
+    })
+    .then(response => response.json())
+    .then(data => {
         if(data.message == "Register successful/user created"){
-            window.location.href = "index.html";
+            login(email,passowrd)
         }
     })
     .catch(error => console.log("Error while Register",error.message));
