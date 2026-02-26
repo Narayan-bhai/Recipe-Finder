@@ -11,15 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.register_blueprint(tables_bp)
 app.register_blueprint(auth_bp)
-CORS(
-    app,
-    supports_credentials=True,
-    origins=[
-        "http://localhost:5500",
-        "http://127.0.0.1:5500"
-        ]
-    )
-app.config["CORS_SUPPORTS_CREDENTIALS"] = True
+CORS(app,supports_credentials=True,origins="*")
 if __name__ == "__main__":
     print("Starting app...")
     app.run(debug=True)

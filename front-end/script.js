@@ -2,7 +2,7 @@
 const url = "http://localhost:5000";
 function insertRow(){
     console.log("Inserting");
-    fetch("http://localhost:5000/insertInto")
+    fetch(url+"/insertInto")
     .then(response => response.json())
     .then(data => console.log(data))
     .then(error => console.log(error))
@@ -10,7 +10,7 @@ function insertRow(){
 
 function getTables(){
     console.log("Getting tables");
-    fetch("http://localhost:5000/getTables")
+    fetch(url+"/getTables")
     .then(response => response.json())
     .then(data => console.log(data))
     .then(error => console.log(error))
@@ -67,38 +67,4 @@ function showRecipes() {
             recipesDiv.innerHTML += recipeHTML;
         });
     });
-}
-
-
-
-function login(){
-    console.log("seeing if login works");
-    return fetch("http://localhost:5000/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                email: "naru@gmail.com",
-                password: "password"
-            })
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
-}
-
-function Me(){
-    console.log("seeing if login works");
-    return fetch("http://localhost:5000/me", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
 }

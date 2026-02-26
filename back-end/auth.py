@@ -49,7 +49,8 @@ def login():
         httponly=True,
         secure=True,
         samesite="None",
-        expires=expires
+        expires=expires,
+        max_age=60*60*24*7
     )
 
     print("response",response)
