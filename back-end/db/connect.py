@@ -1,14 +1,16 @@
-import mysql.connector
-from mysql.connector import Error
+from mysql.connector import Error,pooling
+
+dbConfig = {
+            "host":"localhost",
+            "user":"root",
+            "password":"mysql@123",
+            "database":"DbmsRecipe",
+        }
+pool = pooling.MySQLConnectionPool(
+    pool_name="dbConnectionPool",
+    pool_size=10,
+    **dbConfig
+)
+
 def connectDb():
-    try:
-        con = mysql.connector.connect(
-            host = 'localhost',
-            user = 'root',
-            password = 'mysql@123',
-            database = 'DbmsRecipe',
-        )
-        return con
-    except Error as e:
-        print("Error while connecting to db ",e)
-        return None
+    return pool.get_connection()

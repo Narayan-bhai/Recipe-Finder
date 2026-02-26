@@ -71,3 +71,34 @@ function showRecipes() {
 
 
 
+function login(){
+    console.log("seeing if login works");
+    return fetch("http://localhost:5000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                email: "naru@gmail.com",
+                password: "password"
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+}
+
+function Me(){
+    console.log("seeing if login works");
+    return fetch("http://localhost:5000/me", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+}

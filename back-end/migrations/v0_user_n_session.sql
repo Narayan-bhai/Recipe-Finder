@@ -1,0 +1,18 @@
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY ,
+    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE user_sessions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    session_id CHAR(32) UNIQUE NOT NULL,
+    user_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    expires_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) 
+        REFERENCES users(id) 
+            ON DELETE CASCADE
+);
