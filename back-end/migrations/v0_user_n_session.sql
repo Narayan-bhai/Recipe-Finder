@@ -7,7 +7,6 @@ CREATE TABLE users (
 
 
 CREATE TABLE user_sessions (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     session_id CHAR(32) UNIQUE NOT NULL,
     user_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,

@@ -2,6 +2,7 @@ from flask import Flask
 from routes.tableBluePrint import tables_bp
 from auth import auth_bp
 from auth import *
+from register import *
 from routes.insertInto import *
 from routes.getRecipes import *
 from protectedRoute import *

@@ -1,6 +1,10 @@
 
 const url = "http://localhost:5000";
-function redirect(){
+
+
+
+function goToRegister(){
+    window.location.href="register.html";
 }
 function login(){
     const email = document.getElementById("email").value;
@@ -17,12 +21,12 @@ function login(){
             password: passowrd
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        if(data.message = "Login successful/session created"){
+    .then(async response => {
+        const data = await response.json()
+        if(response.status!=200) throw new Error(data.message)
+        if(data.message == "Login successful/session created"){
             window.location.href = "index.html";
         }
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log("Error while login",error.message));
 }
