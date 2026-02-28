@@ -1,9 +1,9 @@
 from flask import jsonify
 from db.connect import connectDb
 from mysql.connector import Error
-from routes.recipes import tables_bp
+from routes.recipes import recipe_bp
 
-@tables_bp.route("/insertRecipe")
+@recipe_bp.route("/insertRecipe")
 def insertInto():
     try:
         conn = connectDb()   

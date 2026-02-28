@@ -1,9 +1,9 @@
 from flask import jsonify,request
 from db.connect import connectDb
 from mysql.connector import Error
-from routes.recipes import tables_bp
+from routes.recipes import recipe_bp
 
-@tables_bp.route("/searchRecipes")
+@recipe_bp.route("/searchRecipes")
 def searchRecipes():
 
     recipe_name = request.args.get("name", "")
@@ -13,8 +13,13 @@ def searchRecipes():
         cursor = conn.cursor()
 
         cursor.execute(
-            "SELECT id,name,avg_rating,count_rating FROM recipe WHERE name LIKE %s LIMIT 10;", 
-            (f"%{recipe_name}%",)
+            """SELECT id,name,avg_rating,count_rating FROM recipe WHERE 
+            name LIKE %s or 
+            name LIKE %s or
+            name LIKE %s
+            LIMIT 10;
+            """, 
+            (f"% {recipe_name} %",f"% {recipe_name}%",f"%{recipe_name}% ",)
         )
         recipes = cursor.fetchall()
         return jsonify({"recipes": recipes})

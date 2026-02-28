@@ -1,9 +1,9 @@
 from flask import jsonify,request
 from db.connect import connectDb
 from mysql.connector import Error
-from routes.recipes import tables_bp
+from routes.recipes import recipe_bp
 
-@tables_bp.route("/getRecipe/<int:recipe_id>")
+@recipe_bp.route("/getRecipe/<int:recipe_id>")
 def getRecipe(recipe_id):
 
     try:
