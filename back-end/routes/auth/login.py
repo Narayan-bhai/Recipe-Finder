@@ -1,10 +1,8 @@
-from flask import Blueprint,request,jsonify,make_response
-from security import verifyPassword,createSessionId
+from flask import request,jsonify,make_response
+from routes.auth.security import verifyPassword,createSessionId
 from db.connect import connectDb
 from datetime import timedelta,datetime,UTC
-
-
-auth_bp = Blueprint("auth_bp", __name__)
+from routes.auth import auth_bp
 
 @auth_bp.route("/login", methods = ["POST"])
 def login():
@@ -21,10 +19,7 @@ def login():
             (email,)
         )
 
-
         user = cursor.fetchone()
-        print("user",user)
-
         if not user:
             return jsonify({"message":"Invalid credentials/User not found"}),401
         
@@ -43,7 +38,6 @@ def login():
 
         conn.commit()
         response= make_response({"message":"Login successful/session created"})
-        # this is only for dev purpose should be changed on prod
         response.set_cookie(
             "sessionID",
             sessionID,
@@ -53,7 +47,6 @@ def login():
             expires=expires,
             max_age=60*60*24*7
         )
-        print("response",response)
         return response
     except Exception as e:
         print("Error while login",e)

@@ -1,19 +1,19 @@
 from flask import jsonify,request
 from db.connect import connectDb
 from mysql.connector import Error
-from routes.tableBluePrint import tables_bp
-@tables_bp.route("/getRecipes?")
+from routes.recipes import tables_bp
+print("shieesh")
 @tables_bp.route("/getRecipes")
 def getRecipes():
 
     recipe_name = request.args.get("name", "")
 
-    con = connectDb()
-    if con is None:
+    conn = connectDb()
+    if conn is None:
         return {}
 
     try:
-        cursor = con.cursor()
+        cursor = conn.cursor()
 
         query = """
         SELECT 
@@ -42,8 +42,10 @@ def getRecipes():
         recipes = cursor.fetchall()
 
         return jsonify({"recipes": recipes})
-
+    except Error as e:
+        print("Error while getting recipes",e)
+        return jsonify({"message":str(e)}),500
     finally:
         cursor.close()
-        con.close()
+        conn.close()
 

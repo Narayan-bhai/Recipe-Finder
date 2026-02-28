@@ -3,7 +3,6 @@ import bcrypt
 def createSessionId():
     return uuid4().hex
 
-
 def hashPassword(password: str):
     return bcrypt.hashpw(
         password.encode(),
@@ -15,4 +14,3 @@ def verifyPassword(password , hashPassword):
         password.encode(),
         hashPassword.encode()
     )
-

@@ -5,7 +5,7 @@ function goTOLogin(){
     window.location.href = "login.html";
 }
 function login(email,password){
-    return fetch("http://localhost:5000/login", {
+    fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

@@ -1,8 +1,8 @@
-from flask import Blueprint,request,jsonify,make_response
-from security import hashPassword
+from flask import request,jsonify,make_response
 from db.connect import connectDb
-from datetime import timedelta,datetime,UTC
-from auth import auth_bp
+from datetime import datetime,UTC
+from routes.auth.security import hashPassword
+from routes.auth import auth_bp
 
 @auth_bp.route("/register", methods = ["POST"])
 def register():
@@ -21,7 +21,6 @@ def register():
         )
         conn.commit()
         response= make_response({"message":"Register successful/user created"})
-        print("response",response)
         return response
     except Exception as e:
         print("Error while register",e)
