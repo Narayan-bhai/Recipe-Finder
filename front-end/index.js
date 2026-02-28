@@ -1,19 +1,41 @@
 
 const url = "http://localhost:5000";
 
-async function getRecipes(recipeName){
-    console.log("Getting recipes");
-    return fetch(`http://localhost:5000/getRecipes?name=${encodeURIComponent(recipeName)}`)
-        .then(response => response.json())
-        .catch(error => console.log(error));
+async function searchRecipes(recipeName) {
+    return fetch(
+            url+`/searchRecipes?name=${recipeName}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+        })
+        .then(response => {
+            if(response.status!=200) throw new Error(data.message)
+            return response
+        })
+        .then(response => response.json());
 }
-
-function showRecipes() {
-
+async function getRecipeById(id) {
+    return fetch(
+        url+`/getRecipe/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+        })
+        .then(response => {
+            if(response.status!=200) throw new Error(data.message)
+            return response
+        })
+        .then(response => response.json());
+}
+function findRecipes() {
     const recipeName = document.getElementById("recipeInput").value;
-    const recipeCount = parseInt(document.getElementById("recipeCount").value) || 1;
+    const recipeCount =10;
 
-    getRecipes(recipeName)
+    searchRecipes(recipeName)
     .then(data => {
         const recipesDiv = document.querySelector(".recipes");
         recipesDiv.innerHTML = "";
@@ -21,32 +43,57 @@ function showRecipes() {
             recipesDiv.innerHTML = "<p>No recipes found.</p>";
             return;
         }
+
         const recipesToShow = data.recipes.slice(0, recipeCount);
-
         recipesToShow.forEach(recipe => {
+            const id = recipe[0];
+            const name = recipe[1];
+            const avg = recipe[2] ?? 0;
+            const count = recipe[3] ?? 0;
 
-            const name = recipe[0];
-            const instructions = recipe[1].split("|");
-            const ingredients = recipe[2].split(",");
+            const card = `
+                <div class="recipe-card"
+                    onclick="loadRecipe(${id})">
 
-            const recipeHTML = `
-                <div class="recipe-card">
-                    <h2>${name}</h2>
+                    <h3>${name}</h3>
 
-                    <h3>Ingredients</h3>
-                    <ul>
-                        ${ingredients.map(i => `<li>${i.trim()}</li>`).join("")}
-                    </ul>
+                    <p class="rating">
+                        ⭐ ${avg} (${count} ratings)
+                    </p>
 
-                    <h3>Instructions</h3>
-                    <ol>
-                        ${instructions.map(step => `<li>${step.trim()}</li>`).join("")}
-                    </ol>
                 </div>
-                <hr>
             `;
-
-            recipesDiv.innerHTML += recipeHTML;
+            recipesDiv.innerHTML += card;
         });
+    })
+    .catch(error => console.log("Error while find recipe",error.message));
+}
+
+function loadRecipe(recipeId) {
+    getRecipeById(recipeId)
+    .then(data => {
+        const recipe = data.recipe;
+        const detailDiv = document.querySelector(".recipe-detail");
+
+        detailDiv.innerHTML = `
+            <h1>${recipe.name}</h1>
+            <h3>Ingredients</h3>
+            <ul>
+                ${recipe.ingredients.map(i => `
+                    <li>
+                        ${i.name} 
+                        ${i.quantity ? i.quantity : ""} 
+                        ${i.unit ? i.unit : ""} 
+                        ${i.size ? "(" + i.size + ")" : ""} 
+                        ${i.notes ? "- " + i.notes : ""}
+                    </li>
+                `).join("")}
+            </ul>
+
+            <h3>Instructions</h3>
+            <ol>
+                ${recipe.instructions.map(step => `<li>${step.trim()}</li>`).join("")}
+            </ol>
+        `;
     });
 }
