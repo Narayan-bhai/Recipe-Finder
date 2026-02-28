@@ -7,6 +7,9 @@ from routes.auth import auth_bp
 @auth_bp.route("/register", methods = ["POST"])
 def register():
     data = request.json
+    firstName = data.get("firstName")
+    lastName = data.get("lastName")
+    userName = data.get("userName")
     email = data.get("email")   
     password = data.get("password")
 
@@ -16,8 +19,8 @@ def register():
         password = hashPassword(password)
         createdAt = datetime.now(UTC)
         cursor.execute(
-            "INSERT INTO users (email,created_at,password_hash) VALUES (%s,%s,%s);",
-            (email,createdAt,password)
+            "INSERT INTO users (first_name,last_name,user_name,email,created_at,password_hash) VALUES (%s,%s,%s,%s,%s,%s);",
+            (firstName,lastName,userName,email,createdAt,password)
         )
         conn.commit()
         response= make_response({"message":"Register successful/user created"})

@@ -26,19 +26,26 @@ function login(email,password){
     .catch(error => console.log("Error while login",error.message));
 }
 function register(){
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const userName = document.getElementById("userName").value;
     const email = document.getElementById("email").value;
-    const passowrd = document.getElementById("password").value;
+    const password = document.getElementById("password").value;
     console.log("register func") 
-    console.log("email",email," ",passowrd);
-    return fetch("http://localhost:5000/register", {
+    console.log("email",email," ",password);
+
+    fetch("http://localhost:5000/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         credentials: "include",
         body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            userName: userName,
             email: email,
-            password: passowrd
+            password: password,
         })
     })
     .then(response => {
@@ -48,7 +55,7 @@ function register(){
     .then(response => response.json())
     .then(data => {
         if(data.message == "Register successful/user created"){
-            login(email,passowrd)
+            login(email,password)
         }
     })
     .catch(error => console.log("Error while Register",error.message));
