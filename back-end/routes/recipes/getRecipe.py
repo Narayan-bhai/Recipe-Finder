@@ -2,15 +2,17 @@ from flask import jsonify,request
 from db.connect import connectDb
 from mysql.connector import Error
 from routes.recipes import recipe_bp
+from middleware import login_required
 
 @recipe_bp.route("/getRecipe/<int:recipe_id>")
+@login_required
 def getRecipe(recipe_id):
 
     try:
         conn = connectDb()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT name, instructions FROM recipe WHERE id = %s", (recipe_id,))
+        cursor.execute("SELECT name, instructions FROM recipe WHERE id = %s;", (recipe_id,))
         recipe_row = cursor.fetchone()
 
         if not recipe_row:

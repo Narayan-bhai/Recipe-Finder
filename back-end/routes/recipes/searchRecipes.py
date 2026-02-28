@@ -2,8 +2,10 @@ from flask import jsonify,request
 from db.connect import connectDb
 from mysql.connector import Error
 from routes.recipes import recipe_bp
+from middleware.loginRequired import login_required
 
 @recipe_bp.route("/searchRecipes")
+@login_required
 def searchRecipes():
 
     recipe_name = request.args.get("name", "")
@@ -19,7 +21,7 @@ def searchRecipes():
             name LIKE %s
             LIMIT 10;
             """, 
-            (f"% {recipe_name} %",f"% {recipe_name}%",f"%{recipe_name}% ",)
+            (f"% {recipe_name} %",f"% {recipe_name}",f"{recipe_name} % ",)
         )
         recipes = cursor.fetchall()
         return jsonify({"recipes": recipes})
