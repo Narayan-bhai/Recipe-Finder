@@ -1,6 +1,20 @@
 
 const url = "http://localhost:5000";
 
+window.onload = function() {
+    console.log("cookie",this.document.cookie)
+};
+
+function goToLogin(){
+    window.location.href = "login.html";
+}
+function goToRegister(){
+    window.location.href="register.html";
+}
+function showLoginCard(){
+    const card = document.querySelector(".card");
+    card.style.display = "block";
+}
 async function searchRecipes(recipeName) {
     return fetch(
             url+`/searchRecipes?name=${recipeName}`, {
@@ -12,6 +26,9 @@ async function searchRecipes(recipeName) {
         })
         .then(async response => {
             data = await response.json()
+            if(response.status == 401){
+                showLoginCard();
+            }
             if(!response.ok) throw new Error(data.message)
             return data
         });
@@ -31,77 +48,10 @@ async function getRecipeById(id) {
             return data
         });
 }
-// function findRecipes() {
-//     const recipeName = document.getElementById("recipeInput").value;
-//     const recipeCount =10;
-
-//     searchRecipes(recipeName)
-//     .then(data => {
-//         const recipesDiv = document.querySelector(".recipes");
-//         recipesDiv.innerHTML = "";
-//         if (!data.recipes || data.recipes.length === 0) {
-//             recipesDiv.innerHTML = "<p>No recipes found.</p>";
-//             return;
-//         }
-
-//         const recipesToShow = data.recipes.slice(0, recipeCount);
-//         recipesToShow.forEach(recipe => {
-//             const id = recipe[0];
-//             const name = recipe[1];
-//             const avg = recipe[2] ?? 0;
-//             const count = recipe[3] ?? 0;
-
-//             const card = `
-//                 <div class="recipe-card"
-//                     onclick="loadRecipe(${id})">
-
-//                     <h3>${name}</h3>
-
-//                     <p class="rating">
-//                         ⭐ ${avg} (${count} ratings)
-//                     </p>
-
-//                 </div>
-//             `;
-//             recipesDiv.innerHTML += card;
-//         });
-//     })
-//     .catch(error => console.log("Error while find recipe",error.message));
-// }
-
-// function loadRecipe(recipeId) {
-//     getRecipeById(recipeId)
-//     .then(data => {
-//         const recipe = data.recipe;
-//         const detailDiv = document.querySelector(".recipe-detail");
-
-//         detailDiv.innerHTML = `
-//             <h1>${recipe.name}</h1>
-//             <h3>Ingredients</h3>
-//             <ul>
-//                 ${recipe.ingredients.map(i => `
-//                     <li>
-//                         ${i.name} 
-//                         ${i.quantity ? i.quantity : ""} 
-//                         ${i.unit ? i.unit : ""} 
-//                         ${i.size ? "(" + i.size + ")" : ""} 
-//                         ${i.notes ? "- " + i.notes : ""}
-//                     </li>
-//                 `).join("")}
-//             </ul>
-
-//             <h3>Instructions</h3>
-//             <ol>
-//                 ${recipe.instructions.map(step => `<li>${step.trim()}</li>`).join("")}
-//             </ol>
-//         `;
-//     })
-//     .catch(error => console.log("Error while geting recipe by id",error.message));
-// }
 
 
 
-let lastSearchResults = []; // Store last search
+let lastSearchResults = [];
 
 function findRecipes() {
     const recipeName = document.getElementById("recipeInput").value;
@@ -113,8 +63,8 @@ function findRecipes() {
         const detailDiv = document.querySelector(".recipe-detail");
         const backButton = document.getElementById("backButton");
 
-        detailDiv.innerHTML = ""; // Clear detail
-        backButton.style.display = "none"; // Hide back initially
+        detailDiv.innerHTML = ""; 
+        backButton.style.display = "none"; 
 
         recipesDiv.innerHTML = "";
 
@@ -124,12 +74,13 @@ function findRecipes() {
         }
 
         const recipesToShow = data.recipes.slice(0, recipeCount);
-        lastSearchResults = recipesToShow; // Store for back button
+        lastSearchResults = recipesToShow; 
 
         recipesToShow.forEach(recipe => {
+            console.log(recipe)
             const id = recipe[0];
             const name = recipe[1];
-            const owner = recipe[4] ?? "Unknown"; // assuming 5th field is owner
+            const owner = recipe[4] ?? "Unknown"; 
             const avg = recipe[2] ?? 0;
             const count = recipe[3] ?? 0;
 

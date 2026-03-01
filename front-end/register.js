@@ -1,7 +1,7 @@
 
 const url = "http://localhost:5000";
 
-function goTOLogin(){
+function goToLogin(){
     window.location.href = "login.html";
 }
 function login(email,password){
