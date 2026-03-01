@@ -21,12 +21,12 @@ CREATE TABLE user_sessions (
 CREATE TABLE recipe_rating (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    recipes_id INT NOT NULL,
+    recipe_id INT NOT NULL,
     rating INT,
     FOREIGN KEY (user_id)
         REFERENCES users(id)
             ON DELETE CASCADE,
-    FOREIGN KEY (recipes_id)
+    FOREIGN KEY (recipe_id)
         REFERENCES recipe(id)
             ON DELETE CASCADE
 );

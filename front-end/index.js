@@ -80,9 +80,9 @@ function findRecipes() {
             console.log(recipe)
             const id = recipe[0];
             const name = recipe[1];
-            const owner = recipe[4] ?? "Unknown"; 
             const avg = recipe[2] ?? 0;
             const count = recipe[3] ?? 0;
+            const owner = recipe[4] ?? "Unknown"; 
 
             const card = document.createElement("div");
             card.classList.add("recipe-card");
@@ -145,3 +145,112 @@ function showRecipeList() {
     recipesDiv.style.display = "flex"; // show list
     backButton.style.display = "none"; // hide back
 }
+
+
+
+function addIngredientRow(button) {
+    const row = button.parentElement;
+    const newRow = row.cloneNode(true);
+    newRow.querySelectorAll("input").forEach(input => input.value = ""); 
+    row.parentElement.appendChild(newRow);
+}
+
+
+function checkEnterStep(event) {
+    if(event.key === "Enter") {
+        event.preventDefault();
+        addStepRow();
+    }
+}
+
+function addStepRow() {
+    const instructionsList = document.getElementById("instructionsList");
+    const stepCount = instructionsList.querySelectorAll(".stepRow").length + 1;
+
+    const newStep = document.createElement("div");
+    newStep.className = "stepRow";
+    newStep.innerHTML = `<input type="text" placeholder="Step ${stepCount}" class="stepInput" onkeypress="checkEnterStep(event)" />`;
+
+    instructionsList.appendChild(newStep);
+}
+
+
+function addInstuctionRow(button) {
+    const currentRow = button.parentElement; // the current step row
+    const instructionsList = currentRow.parentElement; // container of all steps
+
+    // Count existing steps to set the new step number
+    const stepCount = instructionsList.querySelectorAll(".stepRow").length + 1;
+
+    // Create a new step row
+    const newRow = document.createElement("div");
+    newRow.className = "stepRow";
+    newRow.innerHTML = `
+        <input type="text" placeholder="Step ${stepCount}" class="stepInput" onkeypress="checkEnterStep(event)" />
+        <button type="button" onclick="addInstuctionRow(this)">+</button>
+    `;
+
+    instructionsList.appendChild(newRow);
+}
+
+
+async function insertRecipe(recipe) {
+    return fetch(
+            url+`/insertRecipe`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(recipe),
+        })
+        .then(async response => {
+            data = await response.json()
+            if(response.status == 401){
+                showLoginCard();
+            }
+            if(!response.ok) throw new Error(data.message)
+            return data
+        });
+}
+
+function addRecipe() {
+    const recipeName = document.getElementById("newRecipeName").value;
+
+    // Ingredients
+    const ingredientRows = document.querySelectorAll(".ingredientsList .ingredientRow");
+    const ingredients = Array.from(ingredientRows).map(row => {
+        return {
+            name: row.querySelector(".ingName").value,
+            quantity: row.querySelector(".ingQty").value,
+            unit: row.querySelector(".ingUnit").value,
+            size: row.querySelector(".ingSize").value,
+            notes: row.querySelector(".ingNotes").value
+        }
+    });
+
+    // Steps
+    const stepRows = document.querySelectorAll("#instructionsList .stepRow");
+    const instructions = Array.from(stepRows)
+                              .map(row => row.querySelector(".stepInput").value) //
+                              .join("|"); // join with '|'
+
+    // Final JSON object
+    const recipeData = {
+        recipeName,
+        ingredients,
+        instructions  // now a single string
+    };
+    console.log("full recipe",recipeData);
+    insertRecipe(recipeData)
+    .then(data =>{
+        console.log("data",data)
+        if(data.message=="Recipe inserted"){
+            console.log("Recipe added successfully")
+        }
+    })
+    .catch(error => console.log("Error while add recipe",error.message));
+
+}
+
+

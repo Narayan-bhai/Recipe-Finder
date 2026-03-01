@@ -15,13 +15,18 @@ def searchRecipes():
         cursor = conn.cursor()
 
         cursor.execute(
-            """SELECT id,name,avg_rating,count_rating FROM recipe WHERE 
+            """
+            SELECT r.id,r.name,r.avg_rating,r.count_rating,u.user_name 
+            FROM recipe r 
+            INNER JOIN users u 
+            ON u.id = r.user_id 
+            WHERE
             name LIKE %s or 
             name LIKE %s or
             name LIKE %s
             LIMIT 10;
             """, 
-            (f"% {recipe_name} %",f"% {recipe_name}",f"{recipe_name} % ",)
+            (f"{recipe_name} % ",f"% {recipe_name}",f"%{recipe_name}%",)
         )
         recipes = cursor.fetchall()
         return jsonify({"recipes": recipes})

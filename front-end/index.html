@@ -17,6 +17,39 @@
     <button onclick="findRecipes()">Search</button>
     <div class="recipes"></div>
     <div class="recipe-detail"></div>
+
+
+
+
+    <div class="newRecipe">
+      <h2>Add a New Recipe</h2>
+
+      <input type="text" id="newRecipeName" placeholder="Enter name of your recipe" />
+
+      <h3>Ingredients</h3>
+      <div class="ingredientsList">
+          <div class="ingredientRow">
+              <input type="text" placeholder="Ingredient name" class="ingName" />
+              <input type="text" placeholder="Quantity" class="ingQty" />
+              <input type="text" placeholder="Unit" class="ingUnit" />
+              <input type="text" placeholder="Size" class="ingSize" />
+              <input type="text" placeholder="Notes" class="ingNotes" />
+              <button type="button" onclick="addIngredientRow(this)">+</button>
+          </div>
+      </div>
+
+      <h3>Instructions / Steps</h3>
+      <div id="instructionsList">
+          <div class="stepRow">
+              <input type="text" placeholder="Step 1" class="stepInput" onkeypress="checkEnterStep(event)" />
+              <button type="button" onclick="addInstuctionRow(this)">+</button>
+          </div>
+      </div>
+
+      <button onclick="addRecipe()">Upload your own recipe</button>
+      </div>
+
+
     <button id="backButton" onclick="showRecipeList()" style="display:none;">⬅ Back to list</button>
   </body>
 </html>
