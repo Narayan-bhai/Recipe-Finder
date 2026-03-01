@@ -52,8 +52,10 @@ def login():
         print("Error while login",e)
         return jsonify({"message":str(e)}),501
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 

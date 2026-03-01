@@ -19,12 +19,9 @@ function login(){
             password: passowrd
         })
     })
-    .then(response => {
-        if(response.status!=200) throw new Error(data.message)
-        return response
-    })
-    .then(response => response.json())
-    .then(data => {
+    .then(async response => {
+        data = await response.json()
+        if(!response.ok) throw new Error(data.message)
         if(data.message == "Login successful/session created"){
             window.location.href = "index.html";
         }

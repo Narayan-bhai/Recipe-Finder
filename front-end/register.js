@@ -17,8 +17,8 @@ function login(email,password){
         })
     })
     .then(async response => {
-        const data = await response.json()
-        if(response.status!=200) throw new Error(data.message)
+        data = await response.json()
+        if(!response.ok) throw new Error(data.message)
         if(data.message == "Login successful/session created"){
             window.location.href = "index.html";
         }
@@ -48,12 +48,9 @@ function register(){
             password: password,
         })
     })
-    .then(response => {
-        if(response.status!=200) throw new Error(data.message)
-        return response
-    })
-    .then(response => response.json())
-    .then(data => {
+    .then(async response => {
+        data = await response.json()
+        if(!response.ok) throw new Error(data.message)
         if(data.message == "Register successful/user created"){
             login(email,password)
         }

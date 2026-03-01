@@ -5,9 +5,9 @@ body {
 }
 
 .recipes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .recipe-card {
@@ -17,15 +17,17 @@ body {
     box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     cursor: pointer;
     transition: 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
 .recipe-card:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
 }
 
-.rating {
-    color: #f39c12;
+.rating, .owner {
     font-weight: bold;
+    margin-top: 5px;
 }
 
 .recipe-detail {
@@ -33,4 +35,15 @@ body {
     background: white;
     padding: 20px;
     border-radius: 10px;
+}
+
+#backButton {
+    margin-top: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
 }

@@ -2,8 +2,10 @@ from flask import jsonify
 from db.connect import connectDb
 from mysql.connector import Error
 from routes.recipes import recipe_bp
+from middleware import login_required
 
 @recipe_bp.route("/insertRecipe")
+@login_required
 def insertInto():
     try:
         conn = connectDb()   

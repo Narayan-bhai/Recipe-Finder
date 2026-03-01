@@ -29,8 +29,10 @@ def register():
         print("Error while register",e)
         return jsonify({"message":str(e)}),500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 
 
