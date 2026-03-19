@@ -15,7 +15,11 @@ def login_required(fn):
             conn = connectDb()
             cursor = conn.cursor(dictionary = True)
             cursor.execute(
-                "SELECT user_id,expires_at FROM user_sessions WHERE session_id = %s ",
+                """SELECT user_id,expires_at 
+                FROM user_sessions 
+                WHERE session_id = %s 
+                AND UTC_TIMESTAMP() < expires_at ;
+                """,
                 (sessionID,)
             )
 

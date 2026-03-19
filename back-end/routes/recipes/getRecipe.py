@@ -12,14 +12,20 @@ def getRecipe(recipe_id):
         conn = connectDb()
         cursor = conn.cursor()
 
-        cursor.execute("SELECT name, instructions FROM recipe WHERE id = %s;", (recipe_id,))
+        cursor.execute("SELECT name FROM recipe WHERE id = %s;", (recipe_id,))
         recipe_row = cursor.fetchone()
 
         if not recipe_row:
             return jsonify({"message": "Recipe not found with given id"}), 404
         
         recipe_name = recipe_row[0]
-        instructions = recipe_row[1].split("|") if recipe_row[1] else []
+
+        cursor.execute("SELECT instruction FROM instructions WHERE recipe_id = %s;", (recipe_id,))
+        instruction_rows = cursor.fetchall()
+        if not instruction_rows:
+            return jsonify({"message": "Instruction not found with given recipe id"}), 404
+
+        instructions = [row[0] for row in instruction_rows]
 
         cursor.execute(
             """
